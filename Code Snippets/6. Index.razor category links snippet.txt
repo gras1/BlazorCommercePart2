@@ -1,0 +1,3 @@
+<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#childrenandbabies" role="tab">Children & Babies</a></li>
+<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#women" role="tab">Women</a></li>
+<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#men" role="tab">Men</a></li>

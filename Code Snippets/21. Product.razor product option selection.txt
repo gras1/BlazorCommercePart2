@@ -1,0 +1,22 @@
+<!--/ End Description -->
+@if (_product != null && _product.ProductOptionType != "N/A")
+{
+<!-- Product Options -->
+<div class="color"><h4>Available Options</h4></div>
+<div class="size">
+    <h4>@_product.ProductOptionType</h4>
+    <ul>
+        @{
+            int counter = 1;
+            string[] ones = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twentyone", "twentytwo", "twentythree", "twentyfour", "twentyfive"};
+        
+        foreach (var productOption in _product.ProductOptions)
+        {
+        <li><a href="#" class="@ones[counter - 1]">@productOption.Option</a></li>
+            counter++;
+        }
+        }
+    </ul>
+</div>
+<!--/ Product Options -->
+}

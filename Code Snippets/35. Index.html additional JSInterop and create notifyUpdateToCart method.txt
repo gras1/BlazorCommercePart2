@@ -1,0 +1,9 @@
+var GLOBAL = {};
+GLOBAL.DotNetReference = null;
+GLOBAL.SetDotnetReference = function (pDotNetReference) {
+	GLOBAL.DotNetReference = pDotNetReference;
+};
+
+function notifyUpdateToCart() {
+	GLOBAL.DotNetReference.invokeMethodAsync('TriggerUpdateToCart');
+}

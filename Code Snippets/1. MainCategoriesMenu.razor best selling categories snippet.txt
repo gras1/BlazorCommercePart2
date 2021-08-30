@@ -1,0 +1,7 @@
+@code {
+    private BlazorCommerce.Shared.BestSellingCategoriesDto _bestSellingCategories;
+
+	protected override async Task OnInitializedAsync() {
+        _bestSellingCategories = await Http.GetFromJsonAsync<BlazorCommerce.Shared.BestSellingCategoriesDto>("category/bestsellingcategories");
+	}
+}

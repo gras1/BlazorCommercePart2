@@ -1,0 +1,4 @@
+protected string DoPlaceholderReplacements(string source)
+{
+	return source.Replace("__p__", "<p>").Replace("__cp__", "</p><br>");
+}

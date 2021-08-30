@@ -1,0 +1,17 @@
+.shop.single .product-des .size ul li button {
+	display: block;
+	height: 30px;
+	border: 1px solid #5C2D91;
+	text-align: center;
+	line-height: 30px;
+	font-size: 14px;
+	padding-left: 4px;
+	padding-right: 4px;
+	background-color: #eee;
+	color: #000;
+	margin-bottom: 4px;
+}
+.shop.single .product-des .size ul li button.selected{
+	color: #eee;
+	background-color: #5C2D91;
+}

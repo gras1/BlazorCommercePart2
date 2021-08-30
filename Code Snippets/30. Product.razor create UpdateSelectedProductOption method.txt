@@ -1,0 +1,7 @@
+private void UpdateSelectedProductOption(int productOptionProductInstanceId, decimal productPrice, int productStock)
+{
+    ProductOptionProductInstanceId = productOptionProductInstanceId;
+    ProductPrice = string.Format("£{0:0.00}", productPrice);
+    ProductStock = productStock;
+    ProductQuantity = 1;
+}

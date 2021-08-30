@@ -1,0 +1,4 @@
+@foreach (var menuCategory in _menuCategories)
+{
+<li><a href="/category/@menuCategory.FriendlyUrl">@menuCategory.Name</a></li>
+}

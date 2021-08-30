@@ -1,0 +1,13 @@
+protected override async Task OnInitializedAsync()
+{
+	var lDotNetReference = DotNetObjectReference.Create(this);
+	await JSRuntime.InvokeVoidAsync("GLOBAL.SetDotnetReference", lDotNetReference);
+}
+
+[JSInvokable("TriggerUpdateToCart")]
+public async Task TriggerUpdateToCart()
+{
+	var cartId = await JSRuntime.InvokeAsync<string>("getCartCookie");
+	_cart = await Http.GetFromJsonAsync<CartMinDto>($"cartmin/{cartId}");
+	StateHasChanged();
+}

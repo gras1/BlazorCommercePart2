@@ -1,0 +1,10 @@
+protected override async Task OnInitializedAsync() {
+	var cartId = await JSRuntime.InvokeAsync<string>("getCartCookie");
+	if (string.IsNullOrEmpty(cartId))
+	{
+		cartId = System.Guid.NewGuid().ToString();
+		await JSRuntime.InvokeVoidAsync("setCartCookie", cartId);
+	}
+
+	_cart = await Http.GetFromJsonAsync<CartMinDto>($"cartmin/{cartId}");
+}

@@ -1,0 +1,37 @@
+<div class="sinlge-bar shopping">
+	<a href="/cart" class="single-icon"><i class="ti-bag"></i>
+	@if (_cart.CartItems.Count() > 0)
+	{
+		<span class="total-count">@_cart.CartItems.Sum(ci => ci.Quantity)</span>
+	}
+	</a>
+	<!-- Shopping Item -->
+	<div class="shopping-item">
+		<div class="dropdown-cart-header">
+			@if (_cart.CartItems.Count() > 0)
+			{
+			<span>@_cart.CartItems.Sum(ci => ci.Quantity) @string.Format("Item{0}", _cart.CartItems.Sum(ci => ci.Quantity) != 1 ? "s" : string.Empty)</span>
+			}
+			<a href="/cart">View Cart</a>
+		</div>
+		<ul class="shopping-list">
+			@foreach (var cartItem in _cart.CartItems)
+			{
+			<li>
+				<a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
+				<a class="cart-img" href="#"><img src="@cartItem.CartThumbnailImageUrl" alt="#"></a>
+				<h4><a href="#">@cartItem.ProductName</a></h4>
+				<p class="quantity">@cartItem.Quantity x - <span class="amount">@string.Format("£{0:0.00}", cartItem.TotalAmount)</span></p>
+			</li>
+			}
+		</ul>
+		<div class="bottom">
+			<div class="total">
+				<span>Total</span>
+				<span class="total-amount">@string.Format("£{0:0.00}", _cart.CartItems.Sum(c => c.TotalAmount))</span>
+			</div>
+			<a href="checkout.html" class="btn animate">Checkout</a>
+		</div>
+	</div>
+	<!--/ End Shopping Item -->
+</div>

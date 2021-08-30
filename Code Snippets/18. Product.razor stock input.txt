@@ -1,0 +1,4 @@
+@if (_product != null)
+{
+<input type="text" name="quant[1]" class="input-number" data-min="1" data-max="@_product.Stock" value="1">
+}

@@ -1,0 +1,7 @@
+@if (_product != null)
+{
+    @foreach (var feature in _product.Features)
+    {
+    <li>@feature</li>
+    }
+}

@@ -1,0 +1,18 @@
+<!-- Input Order -->
+<div class="input-group">
+    <div class="button minus">
+        <button type="button" class="btn btn-primary btn-number" @onclick="() => DecrementQuantity()">
+            <i class="ti-minus"></i>
+        </button>
+    </div>
+    @if (_product != null)
+    {
+    <input type="text" class="input-number" readonly value="@ProductQuantity">
+    }
+    <div class="button plus">
+        <button type="button" class="btn btn-primary btn-number" @onclick="() => IncrementQuantity()">
+            <i class="ti-plus"></i>
+        </button>
+    </div>
+</div>
+<!--/ End Input Order -->

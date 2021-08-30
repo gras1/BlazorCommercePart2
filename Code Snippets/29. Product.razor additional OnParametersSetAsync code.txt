@@ -1,0 +1,4 @@
+ProductOptionProductInstanceId = _product.ProductOptionProductInstanceId;
+ProductPrice = string.Format("£{0:0.00}", _product.Price);
+ProductStock = _product.Stock;
+ProductQuantity = 1;

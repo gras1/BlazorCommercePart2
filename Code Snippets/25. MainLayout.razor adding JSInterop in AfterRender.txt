@@ -1,0 +1,13 @@
+protected override async Task OnAfterRenderAsync(bool firstRender)
+{
+	if (firstRender)
+	{
+		await JSRuntime.InvokeVoidAsync("setLayoutFeatures");
+		var cartId = await JSRuntime.InvokeAsync<string>("getCartCookie");
+		if (string.IsNullOrEmpty(cartId))
+		{
+			cartId = System.Guid.NewGuid().ToString();
+			await JSRuntime.InvokeVoidAsync("setCartCookie", cartId);
+		}
+	}
+}

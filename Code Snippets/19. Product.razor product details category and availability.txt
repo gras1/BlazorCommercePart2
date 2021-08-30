@@ -1,0 +1,5 @@
+@if (_product != null)
+{
+<p class="cat">Category :<a href="category/@_product.LeafCategoryFriendlyUrl">@string.Concat(_product.MetaCategory, " ", _product.LeafCategory)</a></p>
+<p class="availability">Availability : @_product.Stock Products In Stock</p>
+}

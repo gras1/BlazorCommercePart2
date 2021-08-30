@@ -1,0 +1,23 @@
+private void DecrementQuantity()
+{
+    if (ProductQuantity <= 1)
+    {
+        ProductQuantity = 1;
+    }
+    else
+    {
+        ProductQuantity--;
+    }
+}
+
+private void IncrementQuantity()
+{
+    if (ProductQuantity >= ProductStock)
+    {
+        ProductQuantity = ProductStock;
+    }
+    else
+    {
+        ProductQuantity++;
+    }
+}

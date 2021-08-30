@@ -1,0 +1,4 @@
+@if (_cart != null && _cart.CartItems.Count() > 0)
+{
+	@foreach (var cartItem in _cart.CartItems)
+	{

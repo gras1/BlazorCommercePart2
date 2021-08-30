@@ -1,0 +1,1447 @@
+https://github.com/gras1/BlazorCommercePart2
+Build simple e-commerce website using Blazor
+
+Continuing on from BlazorCommerce Part 1
+
+1. Add an additional style to the css styling block on line 863 of /wwwroot/css/style.css that reads .header.shop .main-category li .mega-menu .single-menu {
+vertical-align: top;
+
+2. At the top of Shared/MainCategoriesMenu.razor in BlazorCommerce add the following code:
+@using System.Net.Http
+@inject HttpClient Http
+
+3. At the bottom of Shared/MainCategoriesMenu.razor in BlazorCommerce add the following code:
+@code {
+    private BlazorCommerce.Shared.BestSellingCategoriesDto _bestSellingCategories;
+
+	protected override async Task OnInitializedAsync() {
+        _bestSellingCategories = await Http.GetFromJsonAsync<BlazorCommerce.Shared.BestSellingCategoriesDto>("category/bestsellingcategories");
+	}
+}
+As the component initialises, this will retrieve the best selling categories
+with "1. MainCategoriesMenu.razor best selling categories snippet.txt"
+
+4. In Shared/MainCategoriesMenu.razor in BlazorCommerce below the line of html that reads: <li class="main-mega"><a href="#">best selling <i class="fa fa-angle-right" aria-hidden="true"></i></a> add the following code:
+@if (_bestSellingCategories != null)
+{
+
+5. In Shared/MainCategoriesMenu.razor in BlazorCommerce above the line of html that reads:
+</li>
+<li><a href="#">accessories</a></li>
+add the following code:
+}
+
+6. In Shared/MainCategoriesMenu.razor in BlazorCommerce replace the code that reads:
+<a href="#" class="title-link">Shop Kid's</a>
+<div class="image">
+    <img src="https://via.placeholder.com/225x155" alt="#">
+</div>
+<div class="inner-link">
+    <a href="#">Kids Toys</a>
+    <a href="#">Kids Travel Car</a>
+    <a href="#">Kids Color Shape</a>
+    <a href="#">Kids Tent</a>
+</div>
+with:
+<a href="/metacategory/@_bestSellingCategories.ChildrenAndBabies.FriendlyName" class="title-link">Shop @_bestSellingCategories.ChildrenAndBabies.Name</a>
+<div class="image">
+    <img src="@_bestSellingCategories.ChildrenAndBabies.ImageUrl" alt="#">
+</div>
+<div class="inner-link">
+    @foreach (var bestSellingCategory in _bestSellingCategories.ChildrenAndBabies.BestSellingLeafCategories)
+    {
+    <a href="/category/@bestSellingCategory.FriendlyUrl">@bestSellingCategory.Name</a>
+    }
+</div>
+This is for the Children and Babies category
+with "2. MainCategoriesMenu.razor Children and Babies category snippet.txt"
+
+7. In Shared/MainCategoriesMenu.razor in BlazorCommerce replace the code that reads:
+<a href="#" class="title-link">Shop Men's</a>
+<div class="image">
+    <img src="https://via.placeholder.com/225x155" alt="#">
+</div>
+<div class="inner-link">
+    <a href="#">Watch</a>
+    <a href="#">T-shirt</a>
+    <a href="#">Hoodies</a>
+    <a href="#">Formal Pant</a>
+</div>
+with:
+<a href="/metacategory/@_bestSellingCategories.Mens.FriendlyName" class="title-link">Shop @_bestSellingCategories.Mens.Name</a>
+<div class="image">
+    <img src="@_bestSellingCategories.Mens.ImageUrl" alt="#">
+</div>
+<div class="inner-link">
+    @foreach (var bestSellingCategory in _bestSellingCategories.Mens.BestSellingLeafCategories)
+    {
+    <a href="/category/@bestSellingCategory.FriendlyUrl">@bestSellingCategory.Name</a>
+    }
+</div>
+This is for the Mens category
+with "3. MainCategoriesMenu.razor Mens category snippet.txt"
+
+8. In Shared/MainCategoriesMenu.razor in BlazorCommerce replace the code that reads:
+<a href="#" class="title-link">Shop Women's</a>
+<div class="image">
+    <img src="https://via.placeholder.com/225x155" alt="#">
+</div>
+<div class="inner-link">
+    <a href="#">Ladies Shirt</a>
+    <a href="#">Ladies Frog</a>
+    <a href="#">Ladies Sun Glass</a>
+    <a href="#">Ladies Watch</a>
+</div>
+with:
+<a href="/metacategory/@_bestSellingCategories.Womens.FriendlyName" class="title-link">Shop @_bestSellingCategories.Womens.Name</a>
+<div class="image">
+    <img src="@_bestSellingCategories.Womens.ImageUrl" alt="#">
+</div>
+<div class="inner-link">
+    @foreach (var bestSellingCategory in _bestSellingCategories.Womens.BestSellingLeafCategories)
+    {
+    <a href="/category/@bestSellingCategory.FriendlyUrl">@bestSellingCategory.Name</a>
+    }
+</div>
+This is for the Womens category
+with "4. MainCategoriesMenu.razor Womens category snippet.txt"
+
+9. The New Arrivals main category menu will now be a link to a new arrivals page rather than have a pop-out. In Shared/MainCategoriesMenu.razor in BlazorCommerce replace the code that reads:
+<li><a href="#">New Arrivals <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    <ul class="sub-category">
+        <li><a href="#">accessories</a></li>
+        <li><a href="#">sunglasses</a></li>
+        <li><a href="#">watches</a></li>
+        <li><a href="#">mens</a></li>
+        <li><a href="#">ladies</a></li>
+    </ul>
+</li>
+with:
+<li><a href="/new-arrivals">New Arrivals</a></li>
+
+10. In Shared/MainCategoriesMenu.razor in BlazorCommerce add a new private member:
+private List<MenuCategoryDto> _menuCategories;
+
+11. In Shared/MainCategoriesMenu.razor in BlazorCommerce in the OnInitializedAsync method add a new call to populate the _menuCategories:
+_menuCategories = await Http.GetFromJsonAsync<List<MenuCategoryDto>>("category/menucategories");
+
+12. In Shared/MainCategoriesMenu.razor in BlazorCommerce above the line of code that reads: <li><a href="#">accessories</a></li> add:
+@if (_menuCategories != null)
+{
+
+13. In Shared/MainCategoriesMenu.razor in BlazorCommerce change the lines of code that read:
+            <li><a href="#">denim </a></li>
+        </ul>
+    </div>
+</div>
+with:
+            <li><a href="#">denim </a></li>
+            }
+        </ul>
+    </div>
+</div>
+
+14. In Shared/MainCategoriesMenu.razor in BlazorCommerce replace the lines of code that read:
+<li><a href="#">accessories</a></li>
+<li><a href="#">top 100 offer</a></li>
+<li><a href="#">sunglass</a></li>
+<li><a href="#">watch</a></li>
+<li><a href="#">man’s product</a></li>
+<li><a href="#">ladies</a></li>
+<li><a href="#">westrn dress</a></li>
+<li><a href="#">denim </a></li>
+with:
+@foreach (var menuCategory in _menuCategories)
+{
+<li><a href="/category/@menuCategory.FriendlyUrl">@menuCategory.Name</a></li>
+}
+with "5. MainCategoriesMenu.razor menu categories list snippet.txt"
+
+Next is to sort out the Trending Items which will be limited to the three meta categories which will be products that are regularly viewed and limit to 4 rather than 8.
+
+15. In Pages/Index.razor in BlazorCommerce change the line that reads:
+<h2>Trending Item</h2>
+to:
+<h2>Trending Items</h2>
+
+16. In Pages/Index.razor in BlazorCommerce change the lines that read:
+<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#man" role="tab">Man</a></li>
+<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#women" role="tab">Woman</a></li>
+<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#kids" role="tab">Kids</a></li>
+<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#accessories" role="tab">Accessories</a></li>
+<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#essential" role="tab">Essential</a></li>
+<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#prices" role="tab">Prices</a></li>
+to:
+<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#childrenandbabies" role="tab">Children & Babies</a></li>
+<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#women" role="tab">Women</a></li>
+<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#men" role="tab">Men</a></li>
+with "6. Index.razor category links snippet.txt"
+
+17. In Pages/Index.razor in BlazorCommerce delete the tab-pane divs for accessories, essential and prices
+
+18. In the code section of Pages/Index.razor in BlazorCommerce add the following line of code:
+private TrendingProductsDto _trendingProducts;
+
+19. In Pages/Index.razor in BlazorCommerce in the OnInitializedAsync method add a new call to populate the _trendingProducts:
+_trendingProducts = await Http.GetFromJsonAsync<TrendingProductsDto>("product/trendingproducts");
+
+20. In Pages/Index.razor in BlazorCommerce change the line of html that reads:
+<div class="tab-pane fade show active" id="man" role="tabpanel">
+to:
+<div class="tab-pane fade show active" id="childrenandbabies" role="tabpanel">
+
+21. In Pages/Index.razor in BlazorCommerce under the div for childrenandbabies, delete all the divs below the <div class="row"> and replace with:
+@if (_trendingProducts != null)
+{
+	@foreach (var trendingProduct in _trendingProducts.ChildrenAndBabies)
+	{
+		<div class="col-xl-3 col-lg-4 col-md-4 col-12">
+			<div class="single-product">
+				<div class="product-img">
+					<a href="/product/@trendingProduct.FriendlyUrl">
+						<img class="default-img" src="@trendingProduct.TrendingItemImageUrl" alt="#">
+						<img class="hover-img" src="@trendingProduct.TrendingItemImageUrl" alt="#">
+					</a>
+					<div class="button-head">
+						<div class="product-action">
+							<a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
+							<a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
+							<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
+						</div>
+						<div class="product-action-2">
+							<a title="Add to cart" href="#">Add to cart</a>
+						</div>
+					</div>
+				</div>
+				<div class="product-content">
+					<h3><a href="/product/@trendingProduct.FriendlyUrl">@trendingProduct.Name</a></h3>
+					<div class="product-price">
+						<span>@string.Format("£{0:0.00}", trendingProduct.Price)</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}
+with "7. Index.razor children and babies.txt"
+
+22. In Pages/Index.razor in BlazorCommerce under the div for women, delete all the divs below the <div class="row"> and replace with:
+@if (_trendingProducts != null)
+{
+	@foreach (var trendingProduct in _trendingProducts.Womens)
+	{
+		<div class="col-xl-3 col-lg-4 col-md-4 col-12">
+			<div class="single-product">
+				<div class="product-img">
+					<a href="/product/@trendingProduct.FriendlyUrl">
+						<img class="default-img" src="@trendingProduct.TrendingItemImageUrl" alt="#">
+						<img class="hover-img" src="@trendingProduct.TrendingItemImageUrl" alt="#">
+					</a>
+					<div class="button-head">
+						<div class="product-action">
+							<a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
+							<a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
+							<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
+						</div>
+						<div class="product-action-2">
+							<a title="Add to cart" href="#">Add to cart</a>
+						</div>
+					</div>
+				</div>
+				<div class="product-content">
+					<h3><a href="/product/@trendingProduct.FriendlyUrl">@trendingProduct.Name</a></h3>
+					<div class="product-price">
+						<span>@string.Format("£{0:0.00}", trendingProduct.Price)</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}
+with "8. Index.razor women.txt"
+
+23. In Pages/Index.razor in BlazorCommerce change the line of html that reads:
+<div class="tab-pane fade" id="kids" role="tabpanel">
+to:
+<div class="tab-pane fade" id="men" role="tabpanel">
+
+24. In Pages/Index.razor in BlazorCommerce under the div for men, delete all the divs below the <div class="row"> and replace with:
+@if (_trendingProducts != null)
+{
+	@foreach (var trendingProduct in _trendingProducts.Mens)
+	{
+		<div class="col-xl-3 col-lg-4 col-md-4 col-12">
+			<div class="single-product">
+				<div class="product-img">
+					<a href="/product/@trendingProduct.FriendlyUrl">
+						<img class="default-img" src="@trendingProduct.TrendingItemImageUrl" alt="#">
+						<img class="hover-img" src="@trendingProduct.TrendingItemImageUrl" alt="#">
+					</a>
+					<div class="button-head">
+						<div class="product-action">
+							<a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
+							<a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
+							<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
+						</div>
+						<div class="product-action-2">
+							<a title="Add to cart" href="#">Add to cart</a>
+						</div>
+					</div>
+				</div>
+				<div class="product-content">
+					<h3><a href="/product/@trendingProduct.FriendlyUrl">@trendingProduct.Name</a></h3>
+					<div class="product-price">
+						<span>@string.Format("£{0:0.00}", trendingProduct.Price)</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}
+with "9. Index.razor men.txt"
+
+Now we need to fix the breadcrumb on the category page, so that the meta category is shown.
+
+25. In Pages/Category.razor in BlazorCommerce we need to update the breadcrumb section. Add the following code above the line of code that reads <li class="active"><a href="category/@_category.FriendlyUrl">@_category.Name</a></li>
+<li><a href="metacategory/@_category.MetaCategory.FriendlyUrl">@_category.MetaCategory.Name</a><i class="ti-arrow-right"></i></li>
+
+Next we need to display the products associated with the leaf category.
+
+26. In the code section of Pages/Category.razor in BlazorCommerce add the following line of code:
+private IEnumerable<BlazorCommerce.Shared.CategoryProductDto> _categoryProducts;
+
+27. In the OnParametersSetAsync method in Pages/Category.razor in BlazorCommerce add the following line of code:
+_categoryProducts = await Http.GetFromJsonAsync<IEnumerable<BlazorCommerce.Shared.CategoryProductDto>>($"product/categoryproducts/{_category.Id}");
+
+28. In Pages/Category.razor in BlazorCommerce replace the html that reads:
+        <!--/ End Shop Top -->
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4 col-md-6 col-12">
+with:
+        <!--/ End Shop Top -->
+    </div>
+</div>
+<div class="row">
+    @if (_categoryProducts != null)
+    {
+    <div class="col-lg-4 col-md-6 col-12">
+
+29. In Pages/Category.razor in BlazorCommerce replace the html that reads:
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+</section>
+<!--/ End Product Style 1  -->
+with:
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+     </div>
+</section>
+<!--/ End Product Style 1  -->
+
+30. In Pages/Category.razor in BlazorCommerce delete all divs with <div class="col-lg-4 col-md-6 col-12">
+
+31. In Pages/Category.razor in BlazorCommerce within @if (_categoryProducts != null) add the following code:
+@foreach (var categoryProduct in _categoryProducts)
+{
+<div class="col-lg-4 col-md-6 col-12">
+    <div class="single-product">
+        <div class="product-img">
+            <a href="/product/@categoryProduct.FriendlyUrl"><img class="default-img" src="@categoryProduct.CategoryImageUrl" alt="#"> <img class="hover-img" src="@categoryProduct.CategoryHoverImageUrl" alt="#"></a>
+            <div class="button-head">
+                <div class="product-action"><a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class="ti-eye"></i><span>Quick Shop</span></a> <a title="Wishlist" href="#"><i class="ti-heart"></i><span>Add to Wishlist</span></a> <a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a></div>
+                <div class="product-action-2"><a title="Add to cart" href="#">Add to cart</a></div>
+            </div>
+        </div>
+        <div class="product-content">
+            <h3><a href="/product/@categoryProduct.FriendlyUrl">@categoryProduct.Name</a></h3>
+            <div class="product-price"><span>@string.Format("£{0:0.00}", categoryProduct.Price)</span></div>
+        </div>
+    </div>
+</div>
+}
+with "10. Category.razor single product image.txt"
+
+In the Terminal window cd in to BlazorCommerce and type dotnet run
+In another Terminal window cd in to BlazorCommerce.Api and type dotnet run
+In a browser go to https://localhost:5001 and the index page should appear, click on a category and the product associated with that category should now appear on the category page.
+
+Now to make the product details dynamic
+
+32. In Pages/Product.razor in BlazorCommerce add the following code to the top of the file below the AppState:
+@using System.Net.Http
+@inject HttpClient Http
+
+33. In Pages/Product.razor in BlazorCommerce add the following line of code to the @code section:
+private BlazorCommerce.Shared.ProductDto _product;
+
+protected override async Task OnParametersSetAsync()
+{
+    _product = await Http.GetFromJsonAsync<BlazorCommerce.Shared.ProductDto>($"product/{friendlyProductUrl}");
+}
+with "11. Product.razor make product details dynamic - part 1.txt"
+
+34. In Pages/Product.razor in BlazorCommerce change the line of html that reads:
+<li class="active"><a href="blog-single.html">Shop Details</a></li>
+to:
+@if (_product != null)
+{
+<li><a href="metacategory/@_product.MetaCategoryFriendlyUrl">@_product.MetaCategory</a><i class="ti-arrow-right"></i></li>
+<li><a href="category/@_product.LeafCategoryFriendlyUrl">@_product.LeafCategory</a><i class="ti-arrow-right"></i></li>
+<li class="active"><a href="product/@friendlyProductUrl">@_product.Title</a></li>
+}
+with "12. Product.razor make product details dynamic - part 2.txt"
+
+In the Terminal window cd in to BlazorCommerce and type dotnet run
+In another Terminal window cd in to BlazorCommerce.Api and type dotnet run
+In a browser go to https://localhost:5001 and the index page should appear, navigate to a product and the breadcrumb should be updated accordingly
+
+35. In Pages/Product.razor in BlazorCommerce change the lines of html that read:
+<!-- Product Slider -->
+<div class="product-gallery">
+    <!-- Images slider -->
+    <div class="flexslider-thumbnails">
+        <ul class="slides">
+            <li data-thumb="https://via.placeholder.com/570x520" rel="adjustX:10, adjustY:">
+                <img src="https://via.placeholder.com/570x520" alt="#">
+            </li>
+            <li data-thumb="https://via.placeholder.com/570x520">
+                <img src="https://via.placeholder.com/570x520" alt="#">
+            </li>
+            <li data-thumb="https://via.placeholder.com/570x520">
+                <img src="https://via.placeholder.com/570x520" alt="#">
+            </li>
+            <li data-thumb="https://via.placeholder.com/570x520">
+                <img src="https://via.placeholder.com/570x520" alt="#">
+            </li>
+        </ul>
+    </div>
+    <!-- End Images slider -->
+</div>
+<!-- End Product slider -->
+with:
+<!-- Product Slider -->
+<div class="product-gallery">
+    <!-- Images slider -->
+    <div class="flexslider-thumbnails">
+        <ul class="slides">
+            @if (_product != null)
+            {
+                <li data-thumb="@_product.MainImageThumbnailUrl" rel="adjustX:10, adjustY:">
+                    <img src="@_product.MainImageUrl" alt="#">
+                </li>
+                @if (!string.IsNullOrEmpty(_product.SecondImageUrl))
+                {
+                <li data-thumb="@_product.SecondImageThumbnailUrl">
+                    <img src="@_product.SecondImageUrl" alt="#">
+                </li>
+                }
+                @if (!string.IsNullOrEmpty(_product.ThirdImageUrl))
+                {
+                <li data-thumb="@_product.ThirdImageThumbnailUrl">
+                    <img src="@_product.ThirdImageUrl" alt="#">
+                </li>
+                }
+                @if (!string.IsNullOrEmpty(_product.FourthImageUrl))
+                {
+                <li data-thumb="@_product.FourthImageThumbnailUrl">
+                    <img src="@_product.FourthImageUrl" alt="#">
+                </li>
+                }
+            }
+        </ul>
+    </div>
+    <!-- End Images slider -->
+</div>
+<!-- End Product slider -->
+with "13. Product.razor product gallery flex slider.txt"
+
+To get the Javascript features working (flex slider, menu fade in/out, product quantity increase/decrease/type in ) they need to be triggered manually because the html isn't rendered until after the jquery document.ready event. To do this requires using a feature of Blazor known as JSInterop allowing Javascript methods to be called from C# code (and vice-versa).
+
+36. In wwwroot/index.html in BlazorCommerce add the following code to the bottom of the file just above the closing body tag:
+<script>
+function setLayoutFeatures() {
+	$('.menu').slicknav({
+		prependTo:".mobile-nav",
+		duration:300,
+		animateIn: 'fadeIn',
+		animateOut: 'fadeOut',
+		closeOnClick:true,
+	});
+	jQuery(window).on('scroll', function() {
+		if ($(this).scrollTop() > 200) {
+			$('.header').addClass("sticky");
+		} else {
+			$('.header').removeClass("sticky");
+		}
+	});
+}
+function setFlexSlider() {
+	$('.flexslider-thumbnails').flexslider({
+		animation: "slide",
+		controlNav: "thumbnails",
+	});
+}
+function setProductPageQuantityCounter() {
+	$('.btn-number').click(function(e) {
+		e.preventDefault();
+		fieldName = $(this).attr('data-field');
+		type = $(this).attr('data-type');
+		var input = $("input[name='" + fieldName + "']");
+		var currentVal = parseInt(input.val());
+		if (!isNaN(currentVal)) {
+			if (type == 'minus') {
+				if (currentVal > input.attr('data-min')) {
+					input.val(currentVal - 1).change();
+					if (currentVal - 1 < input.attr('data-max')) {
+						$(".btn-number[data-type='plus'][data-field='" + fieldName + "']").removeAttr('disabled');
+					}
+				}
+				if (parseInt(input.val()) == input.attr('data-min')) {
+					$(this).attr('disabled', true);
+				}
+			} else if (type == 'plus') {
+				if (currentVal < input.attr('data-max')) {
+					input.val(currentVal + 1).change();
+					if (currentVal + 1 > input.attr('data-min')) {
+						$(".btn-number[data-type='minus'][data-field='" + fieldName + "']").removeAttr('disabled');
+					}
+				}
+				if (parseInt(input.val()) == input.attr('data-max')) {
+					$(this).attr('disabled', true);
+				}
+			}
+		} else {
+			input.val(0);
+		}
+	});
+	$('.input-number').focusin(function() {
+		$(this).data('oldValue', $(this).val());
+	});
+	$('.input-number').change(function() {
+		minValue = parseInt($(this).attr('data-min'));
+		maxValue = parseInt($(this).attr('data-max'));
+		valueCurrent = parseInt($(this).val());
+		name = $(this).attr('name');
+		if (valueCurrent >= minValue) {
+			$(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled')
+		} else {
+			alert('Sorry, the minimum value was reached');
+			$(this).val($(this).data('oldValue'));
+		}
+		if (valueCurrent <= maxValue) {
+			$(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
+		} else {
+			alert('Sorry, the maximum value was reached');
+			$(this).val($(this).data('oldValue'));
+		}
+	});
+	$(".input-number").keydown(function(e) {
+		// Allow: backspace, delete, tab, escape, enter and .
+		if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 || // Allow: Ctrl+A
+		(e.keyCode == 65 && e.ctrlKey === true) || // Allow: home, end, left, right
+		(e.keyCode >= 35 && e.keyCode <= 39)) {
+			// let it happen, don't do anything
+			return;
+		}
+		// Ensure that it is a number and stop the keypress
+		if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+			e.preventDefault();
+		}
+	});
+}
+</script>
+with "14. Index.html JavaScript features.txt"
+
+37. In Pages/Product.razor in BlazorCommerce add the following below the line of code that reads @inject HttpClient Http:
+@inject IJSRuntime JSRuntime
+
+38. In Pages/Product.razor in BlazorCommerce add the following method to the @code to invoke JavaScript from C# using the JSInterop:
+protected override async Task OnAfterRenderAsync(bool firstRender)
+{
+    await JSRuntime.InvokeVoidAsync("setFlexSlider");
+    if (firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("setProductPageQuantityCounter");
+    }
+}
+with "15. Product.razor adding JSInterop in AfterRender.txt"
+
+39. In Shared/MainLayout.razor in BlazorCommerce add the following below the line of code that reads @implements IDisposable:
+@inject IJSRuntime JSRuntime
+
+40. In Shared/MainLayout.razor in BlazorCommerce add the following method to the @code to invoke JavaScript from C# using the JSInterop:
+protected override async Task OnAfterRenderAsync(bool firstRender)
+{
+    await JSRuntime.InvokeVoidAsync("setLayoutFeatures");
+}
+with "16. MainLayout.razor adding JSInterop in AfterRender.txt"
+
+In the Terminal window cd in to BlazorCommerce and type dotnet run
+In another Terminal window cd in to BlazorCommerce.Api and type dotnet run
+In a browser go to https://localhost:5001 and the index page should appear, navigate to a product and the flex slider should now be working and rendered correctly
+
+41. In Pages/Product.razor in BlazorCommerce replace the html:
+<h4>Nonstick Dishwasher PFOA</h4>
+with:
+@if (_product != null)
+{
+<h4>@_product.Title</h4>
+}
+
+42. In Pages/Product.razor in BlazorCommerce replace the html:
+<p class="price"><span class="discount">$70.00</span><s>$80.00</s> </p>
+<p class="description">eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere nisl, in</p>
+with:
+@if (_product != null)
+{
+<p class="price"><span class="discount">@string.Format("£{0:0.00}", _product.Price)</span></p>
+<p class="description">@_product.BriefDescription</p>
+}
+with "17. Product.razor make the discount product dynamic.txt"
+
+43. In Pages/Product.razor in BlazorCommerce replace the html that reads:
+<input type="text" name="quant[1]" class="input-number"  data-min="1" data-max="1000" value="1">
+with:
+@if (_product != null)
+{
+<input type="text" name="quant[1]" class="input-number" data-min="1" data-max="@_product.Stock" value="1">
+}
+with "18. Product.razor stock input.txt"
+
+44. In Pages/Product.razor in BlazorCommerce replace the html that reads:
+<p class="cat">Category :<a href="#">Clothing</a></p>
+<p class="availability">Availability : 180 Products In Stock</p>
+with:
+@if (_product != null)
+{
+<p class="cat">Category :<a href="category/@_product.LeafCategoryFriendlyUrl">@string.Concat(_product.MetaCategory, " ", _product.LeafCategory)</a></p>
+<p class="availability">Availability : @_product.Stock Products In Stock</p>
+}
+with "19. Product.razor product details category and availability.txt"
+
+45. In Pages/Product.razor in BlazorCommerce replace the html that reads:
+<li>long established fact.</li>
+<li>has a more-or-less normal distribution.</li>
+<li>lmany variations of passages of.</li>
+<li>generators on the Interne.</li>
+with:
+@if (_product != null)
+{
+    @foreach (var feature in _product.Features)
+    {
+    <li>@feature</li>
+    }
+}
+with "20. Product.razor product features.txt"
+
+46. In Pages/Product.razor in BlazorCommerce change the html that reads:
+<!-- Color -->
+<div class="color">
+    <h4>Available Options <span>Color</span></h4>
+    <ul>
+        <li><a href="#" class="one"><i class="ti-check"></i></a></li>
+        <li><a href="#" class="two"><i class="ti-check"></i></a></li>
+        <li><a href="#" class="three"><i class="ti-check"></i></a></li>
+        <li><a href="#" class="four"><i class="ti-check"></i></a></li>
+    </ul>
+</div>
+<!--/ End Color -->
+<!-- Size -->
+<div class="size">
+    <h4>Size</h4>
+    <ul>
+        <li><a href="#" class="one">S</a></li>
+        <li><a href="#" class="two">M</a></li>
+        <li><a href="#" class="three">L</a></li>
+        <li><a href="#" class="four">XL</a></li>
+        <li><a href="#" class="four">XXL</a></li>
+    </ul>
+</div>
+<!--/ End Size -->
+to:
+<!--/ End Description -->
+@if (_product != null && _product.ProductOptionType != "N/A")
+{
+<!-- Product Options -->
+<div class="color"><h4>Available Options</h4></div>
+<div class="size">
+    <h4>@_product.ProductOptionType</h4>
+    <ul>
+        @{
+            int counter = 1;
+            string[] ones = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twentyone", "twentytwo", "twentythree", "twentyfour", "twentyfive"};
+        
+        foreach (var productOption in _product.ProductOptions)
+        {
+        <li><a href="#" class="@ones[counter - 1]">@productOption.Option</a></li>
+            counter++;
+        }
+        }
+    </ul>
+</div>
+<!--/ Product Options -->
+}
+with "21. Product.razor product option selection.txt"
+
+47. In wwwroot/css/style.css, find the style definition for:
+.shop.single .product-des .size ul li a
+overwrite the width: 36px;
+with:
+padding-left: 4px;
+padding-right: 4px;
+
+48. Add a new method in the @code section of BlazorCommerce/Pages/Product.razor to conduct the string replacements __p__ and __cp__ to opening and closing paragraph tags:
+protected string DoPlaceholderReplacements(string source)
+{
+	return source.Replace("__p__", "<p>").Replace("__cp__", "</p><br>");
+}
+with "22. Product.razor string replacements.txt"
+
+49. In Pages/Product.razor in BlazorCommerce change the html that reads:
+<div class="tab-pane fade show active" id="description" role="tabpanel">
+    <div class="tab-single">
+        <div class="row">
+            <div class="col-12">
+                <div class="single-des">
+                    <p>simply dummy text .....
+                </div>
+                <div class="single-des">
+                    <p>Suspendisse consequatur .....
+                </div>
+to:
+<div class="tab-pane fade show active" id="description" role="tabpanel">
+    <div class="tab-single">
+        <div class="row">
+            <div class="col-12">
+                @if (_product != null)
+                {
+                <div class="single-des">
+                    @((MarkupString)DoPlaceholderReplacements(_product.FullDescription))
+                </div>
+                }
+with "23. Product.razor product description.txt"
+
+50. In wwwroot/css/style.css, find the style definition for:
+.shop.single .product-des .color
+and delete the display: inline-block setting
+
+51. Every time someone visits a product page, the number of times view counter in the database needs to increase by 1. In Pages/Product.razor in BlazorCommerce add the following code to the OnParametersSetAsync method:
+await Http.PostAsync($"product/incrementnumberoftimesviewed/{friendlyProductUrl}", null);
+
+52. Before we can implement the Add to Cart functionality, we need to generate a cookie for the cart id, register it in the database and load any existing cart items from the database. Add the following JavaScript methods to the bottom of the page just before the closing </script> tag in wwwroot/index.html in BlazorCommerce:
+function setCartCookie(cvalue) {
+	const cname = "cartid";
+	const exdays = 365;
+	var d = new Date();
+	d.setTime(d.getTime() + (exdays*24*60*60*1000));
+	const expires = "expires="+ d.toUTCString();
+	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+function getCartCookie() {
+	const cname = "cartid";
+	const name = cname + "=";
+	var decodedCookie = decodeURIComponent(document.cookie);
+	var ca = decodedCookie.split(';');
+	for (var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
+}
+with "24. Index.html cart cookie JavaScript.txt"
+
+53. Add the following code to OnAfterRenderAsync of Shared/MainLayout.razor in BlazorCommerce to read or generate the cart id cookie, this makes use of JavaScript interop - calling JavaScript methods from Blazor:
+protected override async Task OnAfterRenderAsync(bool firstRender)
+{
+	if (firstRender)
+	{
+		await JSRuntime.InvokeVoidAsync("setLayoutFeatures");
+		var cartId = await JSRuntime.InvokeAsync<string>("getCartCookie");
+		if (string.IsNullOrEmpty(cartId))
+		{
+			cartId = System.Guid.NewGuid().ToString();
+			await JSRuntime.InvokeVoidAsync("setCartCookie", cartId);
+		}
+	}
+}
+with "25. MainLayout.razor adding JSInterop in AfterRender.txt"
+
+In the Terminal window cd in to BlazorCommerce and type dotnet run
+In another Terminal window cd in to BlazorCommerce.Api and type dotnet run
+In a browser go to https://localhost:5001 and the index page should appear, open the developer tools and take a look at the cookies, the cartid cookie will be there
+
+54. We need to add code to retrieve the cart and its contents from the database. In Shared/MainLayout.razor in BlazorCommerce, just below the line that reads @inject IJSRuntime JSRuntime
+add:
+@using System.Net.Http
+@using System.Linq
+@inject HttpClient Http
+
+55. In the @code section of Shared/MainLayout.razor in BlazorCommerce add:
+private CartMinDto _cart;
+
+56. In Shared/MainLayout.razor in BlazorCommerce, in the OnAfterRenderAsync method at the end of the if (firstRender) clause but before the closing curly brace add:
+_cart = await Http.GetFromJsonAsync<CartMinDto>($"cartmin/{cartId}");
+StateHasChanged();
+
+57. In Shared/MainLayout.razor in BlazorCommerce, above the html that reads <div class="sinlge-bar shopping">
+add:
+@if (_cart != null)
+{
+
+58. In Shared/MainLayout.razor in BlazorCommerce, change the code that reads:
+		<!--/ End Shopping Item -->
+	</div>
+</div>
+to:
+		<!--/ End Shopping Item -->
+	</div>
+	}
+</div>
+
+59. In Shared/MainLayout.razor in BlazorCommerce, replace from <div class="sinlge-bar shopping"> to its closing </div> with:
+<div class="sinlge-bar shopping">
+	<a href="/cart" class="single-icon"><i class="ti-bag"></i>
+	@if (_cart.CartItems.Count() > 0)
+	{
+		<span class="total-count">@_cart.CartItems.Sum(ci => ci.Quantity)</span>
+	}
+	</a>
+	<!-- Shopping Item -->
+	<div class="shopping-item">
+		<div class="dropdown-cart-header">
+			@if (_cart.CartItems.Count() > 0)
+			{
+			<span>@_cart.CartItems.Sum(ci => ci.Quantity) @string.Format("Item{0}", _cart.CartItems.Sum(ci => ci.Quantity) != 1 ? "s" : string.Empty)</span>
+			}
+			<a href="/cart">View Cart</a>
+		</div>
+		<ul class="shopping-list">
+			@foreach (var cartItem in _cart.CartItems)
+			{
+			<li>
+				<a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
+				<a class="cart-img" href="#"><img src="@cartItem.CartThumbnailImageUrl" alt="#"></a>
+				<h4><a href="#">@cartItem.ProductName</a></h4>
+				<p class="quantity">@cartItem.Quantity x - <span class="amount">@string.Format("£{0:0.00}", cartItem.TotalAmount)</span></p>
+			</li>
+			}
+		</ul>
+		<div class="bottom">
+			<div class="total">
+				<span>Total</span>
+				<span class="total-amount">@string.Format("£{0:0.00}", _cart.CartItems.Sum(c => c.TotalAmount))</span>
+			</div>
+			<a href="checkout.html" class="btn animate">Checkout</a>
+		</div>
+	</div>
+	<!--/ End Shopping Item -->
+</div>
+with "26. MainLayout.razor make shopping cart dynamic.txt"
+
+60. Add some additional styling to the product options. In wwwroot/css/styles.css in BlazorCommerce, under the style: .shop.single .product-des .size ul li a:hover
+add:
+.shop.single .product-des .size ul li button {
+	display: block;
+	height: 30px;
+	border: 1px solid #5C2D91;
+	text-align: center;
+	line-height: 30px;
+	font-size: 14px;
+	padding-left: 4px;
+	padding-right: 4px;
+	background-color: #eee;
+	color: #000;
+	margin-bottom: 4px;
+}
+.shop.single .product-des .size ul li button.selected{
+	color: #eee;
+	background-color: #5C2D91;
+}
+with "27. styles.css additional product options styles.txt"
+
+61. Now add the code to add the chosen product option to the cart. In the @code section of Pages/Product.razor in BlazorCommerce add the following:
+[Parameter]
+public int ProductOptionProductInstanceId { get; set; }
+
+[Parameter]
+public string ProductPrice { get; set; }
+
+[Parameter]
+public int ProductStock {get;set;}
+
+[Parameter]
+public int ProductQuantity {get;set;}
+with "28. Product.razor chosen product properties.txt"
+
+62. In the OnParametersSetAsync method of Pages/Product.razor in BlazorCommerce add the following:
+ProductOptionProductInstanceId = _product.ProductOptionProductInstanceId;
+ProductPrice = string.Format("£{0:0.00}", _product.Price);
+ProductStock = _product.Stock;
+ProductQuantity = 1;
+with "29. Product.razor additional OnParametersSetAsync code.txt"
+
+63. In Pages/Product.razor in BlazorCommerce replace the line of code that reads
+<p class="price"><span class="discount">@string.Format("£{0:0.00}", _product.Price)</span></p>
+with:
+<p class="price"><span class="discount">@ProductPrice</span></p>
+
+64. We need to store the selected product option to do this we need to bind to the ProductOptionProductInstanceId parameter. In Pages/Product.razor in BlazorCommerce under the line of code that reads
+<p class="description">@_product.BriefDescription</p>
+add:
+<input id="selectedProductOptionProductInstanceId" type="hidden" @bind="ProductOptionProductInstanceId" />
+
+65. In Pages/Product.razor in BlazorCommerce replace the line of code that reads
+<input type="text" name="quant[1]" class="input-number" data-min="1" data-max="@_product.Stock" value="1">
+with:
+<input type="text" name="quant[1]" class="input-number" data-min="1" data-max="@ProductStock" value="@ProductQuantity">
+
+66. In Pages/Product.razor in BlazorCommerce replace the line of code that reads
+<p class="availability">Availability : @_product.Stock Products In Stock</p>
+with:
+<p class="availability">Availability : @ProductStock Products In Stock</p>
+
+67. In the @code section of Pages/Product.razor in BlazorCommerce add the following method:
+private void UpdateSelectedProductOption(int productOptionProductInstanceId, decimal productPrice, int productStock)
+{
+    ProductOptionProductInstanceId = productOptionProductInstanceId;
+    ProductPrice = string.Format("£{0:0.00}", productPrice);
+    ProductStock = productStock;
+    ProductQuantity = 1;
+}
+with "30. Product.razor create UpdateSelectedProductOption method.txt"
+
+68. To be able to add products to the cart from the product page. In Pages/Product.razor in BlazorCommerce, change the lines that read:
+<ul>
+    @{
+        int counter = 1;
+        string[] ones = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twentyone", "twentytwo", "twentythree", "twentyfour", "twentyfive"};
+    
+    foreach (var productOption in _product.ProductOptions)
+    {
+    <li><a href="#" class="@ones[counter - 1]">@productOption.Option</a></li>
+        counter++;
+    }
+    }
+</ul>
+to:
+<ul>
+    @foreach (var productOption in _product.ProductOptions)
+    {
+    <li><button @onclick="() => UpdateSelectedProductOption(productOption.ProductOptionProductInstanceId, productOption.Price, productOption.Stock)" class='@string.Format("{0}", productOption.ProductOptionProductInstanceId == _product.ProductOptionProductInstanceId ? "selected" : string.Empty)'>@productOption.Option</button></li>
+    }
+</ul>
+with "31. Product.razor call the UpdateSelectedProductOption method to add products to the cart.txt"
+
+69. In the @code section of Pages/Product.razor in BlazorCommerce add the following methods:
+private void DecrementQuantity()
+{
+    if (ProductQuantity <= 1)
+    {
+        ProductQuantity = 1;
+    }
+    else
+    {
+        ProductQuantity--;
+    }
+}
+
+private void IncrementQuantity()
+{
+    if (ProductQuantity >= ProductStock)
+    {
+        ProductQuantity = ProductStock;
+    }
+    else
+    {
+        ProductQuantity++;
+    }
+}
+with "32. Product.razor increment and decrement product quantity.txt"
+
+70. We need to bind the buttons that increment and decrement the product quantity. In Pages/Product.razor in BlazorCommerce replace the code that reads:
+<!-- Input Order -->
+<div class="input-group">
+    <div class="button minus">
+        <button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+            <i class="ti-minus"></i>
+        </button>
+    </div>
+    @if (_product != null)
+    {
+    <input type="text" name="quant[1]" class="input-number" data-min="1" data-max="@ProductStock" value="@ProductQuantity">
+    }
+    <div class="button plus">
+        <button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
+            <i class="ti-plus"></i>
+        </button>
+    </div>
+</div>
+<!--/ End Input Order -->
+with:
+<!-- Input Order -->
+<div class="input-group">
+    <div class="button minus">
+        <button type="button" class="btn btn-primary btn-number" @onclick="() => DecrementQuantity()">
+            <i class="ti-minus"></i>
+        </button>
+    </div>
+    @if (_product != null)
+    {
+    <input type="text" class="input-number" readonly value="@ProductQuantity">
+    }
+    <div class="button plus">
+        <button type="button" class="btn btn-primary btn-number" @onclick="() => IncrementQuantity()">
+            <i class="ti-plus"></i>
+        </button>
+    </div>
+</div>
+<!--/ End Input Order -->
+with "33. Product.razor implement increment and decrement product quantity functionality.txt"
+
+71. In the OnAfterRenderAsync method in Pages/Product.razor in BlazorCommerce, delete the code that reads:
+if (firstRender)
+{
+    await JSRuntime.InvokeVoidAsync("setProductPageQuantityCounter");
+}
+
+72. In wwwroot/index.html in BlazorCommerce delete the setProductPageQuantityCounter JavaScript method as this is no longer required
+
+73. In the @code section of Pages/Product.razor in BlazorCommerce add the following method:
+private async Task AddItemToCart()
+{
+    var cartItem = new AddItemToCartDto{
+        CartGuid = await JSRuntime.InvokeAsync<string>("getCartCookie"),
+        ProductOptionProductInstanceId = ProductOptionProductInstanceId,
+        Quantity = ProductQuantity
+    };
+    await Http.PostAsJsonAsync("cart/additemtocart", cartItem);
+}
+with "34. Product.razor create AddItemToCart method.txt"
+
+74. In Pages/Product.razor in BlazorCommerce replace the code that reads:
+<a href="#" class="btn">Add to cart</a>
+with:
+<button class="btn" @onclick="AddItemToCart">Add to cart</button>
+
+Now we need to notify MainLayout.razor to re-render the cart when it is updated.
+
+75. Change the AddItemToCart() method in Pages/Product.razor to public.
+
+76. Add an additional line of code at the bottom of the AddItemToCart() method in Pages/Product.razor:
+await JSRuntime.InvokeVoidAsync("notifyUpdateToCart");
+
+77. In wwwroot/index.html add a reference to dotnet for JSInterop and create the notifyUpdateToCart method:
+var GLOBAL = {};
+GLOBAL.DotNetReference = null;
+GLOBAL.SetDotnetReference = function (pDotNetReference) {
+	GLOBAL.DotNetReference = pDotNetReference;
+};
+
+function notifyUpdateToCart() {
+	GLOBAL.DotNetReference.invokeMethodAsync('TriggerUpdateToCart');
+}
+with "35. Index.html additional JSInterop and create notifyUpdateToCart method.txt"
+
+78. In Shared/MainLayout.razor in BlazorCommerce add the following methods:
+protected override async Task OnInitializedAsync()
+{
+	var lDotNetReference = DotNetObjectReference.Create(this);
+	await JSRuntime.InvokeVoidAsync("GLOBAL.SetDotnetReference", lDotNetReference);
+}
+
+[JSInvokable("TriggerUpdateToCart")]
+public async Task TriggerUpdateToCart()
+{
+	var cartId = await JSRuntime.InvokeAsync<string>("getCartCookie");
+	_cart = await Http.GetFromJsonAsync<CartMinDto>($"cartmin/{cartId}");
+	StateHasChanged();
+}
+with "36. MainLayout.razor initialize DotNet reference and TriggerUpdateToCart method.txt"
+
+In the Terminal window cd in to BlazorCommerce and type dotnet run
+In another Terminal window cd in to BlazorCommerce.Api and type dotnet run
+In a browser go to https://localhost:5001 and the index page should appear, navigate to a product page and add a product to the cart, take a look at the top of the page and the number of items in the cart has increased
+
+79. We need to add functionality to the shopping basket to remove items from it. In Shared/MainLayout.razor in BlazorCommerce add the following method:
+public async Task RemoveItemFromCart(int productOptionProductInstanceId)
+{
+	var cartItem = new RemoveItemFromCartDto {
+		CartGuid = await JSRuntime.InvokeAsync<string>("getCartCookie"),
+		ProductOptionProductInstanceId = productOptionProductInstanceId
+	};
+	await Http.PostAsJsonAsync("cart/removeitemfromcart", cartItem);
+	await JSRuntime.InvokeVoidAsync("notifyUpdateToCart");
+}
+with "37. MainLayout.razor add RemoveItemFromCart method.txt"
+
+80. In Shared/MainLayout.razor in BlazorCommerce replace the line of code that reads:
+<a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
+with:
+<button class="btn remove" title="Remove this item" @onclick="() => RemoveItemFromCart(cartItem.ProductOptionProductInstanceId)">
+	<i class="fa fa-remove ti-trash"></i>
+</button>
+
+81. The style of the delete button needs to be altered. In wwwroot/css/style.css add the following:
+.header .shopping-list li button {
+    height: 40px;
+    width: 40px;
+    margin: 0;
+    padding: 0;
+    margin-top: 20px;
+    font-size: 16px;
+    bottom: 8px;
+}
+with "38. style.css altering styling of shopping cart delete button.txt"
+
+Next to add the Add To Cart functionality on the sub-category page.
+
+82. In Shared/Category.razor in BlazorCommerce, add the following code immediately under the line that reads: @inject AppState AppState
+@inject IJSRuntime JSRuntime
+
+83. In Shared/Category.razor in BlazorCommerce, add the following code:
+public async Task AddItemToCart(int productOptionProductInstanceId)
+{
+	var cartItem = new AddItemToCartDto{
+		CartGuid = await JSRuntime.InvokeAsync<string>("getCartCookie"),
+		ProductOptionProductInstanceId = productOptionProductInstanceId,
+		Quantity = 1
+	};
+	await Http.PostAsJsonAsync("cart/additemtocart", cartItem);
+	await JSRuntime.InvokeVoidAsync("notifyUpdateToCart");
+}
+with "39. Category.razor create AddItemToCart method.txt"
+
+84. In Shared/Category.razor in BlazorCommerce, replace the line of code that reads:
+<div class="product-action-2"><a title="Add to cart" href="#">Add to cart</a></div>
+with:
+@if (categoryProduct.ProductOptionProductInstanceId != 0)
+{
+	<button class="btn" title="Add to cart" @onclick="() => AddItemToCart(categoryProduct.ProductOptionProductInstanceId)">Add to cart</button>
+}
+with "40. Category.razor dynamic add to cart button.txt"
+
+The product links in the Shopping Cart need to be fixed
+
+85. In Shared/MainLayout.razor in BlazorCommerce replace the line of code that reads:
+<a class="cart-img" href="#"><img src="@cartItem.CartThumbnailImageUrl" alt="#"></a>
+with:
+<a class="cart-img" href="/product/@cartItem.FriendlyUrl"><img src="@cartItem.CartThumbnailImageUrl" alt="@cartItem.ProductName"></a>
+
+86. In Shared/MainLayout.razor in BlazorCommerce replace the line of code that reads:
+<h4><a href="#">@cartItem.ProductName</a></h4>
+with:
+<h4><a href="/product/@cartItem.FriendlyUrl">@cartItem.ProductName</a></h4>
+
+When a product option is clicked it needs to change style to show it is selected, after a lot of research the only way this can be done is still using JavaScript so a JSInterop call is required
+
+87. In wwwroot/index.html in BlazorCommerce add a new JavaScript method towards the bottom of the <script> tag:
+function setProductOptionProductInstanceClass(productOptionProductInstanceId) {
+	$('.ProductOptionProductInstanceId').removeClass("selected");
+	$('#ProductOptionProductInstance' + productOptionProductInstanceId).addClass("selected");
+}
+with "41. index.html create setProductOptionProductInstanceClass JavaScript method.txt"
+
+88. In Pages/Product.razor in BlazorCommerce change the method UpdateSelectedProductOption to be async Task from a void
+private async Task UpdateSelectedProductOption(int productOptionProductInstanceId, decimal productPrice, int productStock)
+
+89. In Pages/Product.razor in BlazorCommerce add the following line of code to the bottom of the UpdateSelectedProductOption method:
+await JSRuntime.InvokeVoidAsync("setProductOptionProductInstanceClass", productOptionProductInstanceId);
+
+90. In Pages/Product.razor in BlazorCommerce replace the line of code that reads:
+<li><button @onclick="() => UpdateSelectedProductOption(productOption.ProductOptionProductInstanceId, productOption.Price, productOption.Stock)" class='@string.Format("{0}", productOption.ProductOptionProductInstanceId == _product.ProductOptionProductInstanceId ? "selected" : string.Empty)'>@productOption.Option</button></li>
+with:
+<li><button @onclick="() => UpdateSelectedProductOption(productOption.ProductOptionProductInstanceId, productOption.Price, productOption.Stock)" id="@("ProductOptionProductInstance" + productOption.ProductOptionProductInstanceId)" class='ProductOptionProductInstanceId @string.Format("{0}", productOption.ProductOptionProductInstanceId == _product.ProductOptionProductInstanceId ? "selected" : string.Empty)'>@productOption.Option</button></li>
+
+In the Terminal window cd in to BlazorCommerce and type dotnet run
+In another Terminal window cd in to BlazorCommerce.Api and type dotnet run
+In a browser go to https://localhost:5001 and the index page should appear, navigate to a product page with options and click on them, it should change the style of the selected option. Press F12 for the developer tools and check out the value of the input field selectedProductOptionProductInstanceId.
+
+Now to create the shopping cart page and make it dynamic.
+
+91. Create a new file called Cart.razor in BlazorCommerce under the Pages folder.
+
+92. At the top of the file put the following route:
+@page "/cart"
+
+93. From the cart.html page in the template copy the content between the lines that read:
+<!-- Breadcrumbs -->
+and:
+<!--/ End Shopping Cart -->
+then paste it after the @page directive in Cart.razor
+
+Start by sorting out the breadcrumb
+
+94. In Pages/Cart.razor in BlazorCommerce, replace the lines that read:
+<li><a href="index1.html">Home<i class="ti-arrow-right"></i></a></li>
+<li class="active"><a href="blog-single.html">Cart</a></li>
+with:
+<li><a href="/">Home<i class="ti-arrow-right"></i></a></li>
+<li class="active"><a href="/cart">Cart</a></li>
+
+The next thing to do is load the product details of the shopping cart from the database and display them.
+
+95. In Pages/Cart.razor in BlazorCommerce, add a @code section at the bottom of the file
+
+96. In Pages/Cart.razor in BlazorCommerce, add the dependency injection references for HttpClient and JSInterop underneath the @page directive:
+@using System.Net.Http
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+
+97. In Pages/Cart.razor in BlazorCommerce, add a new private member variable that will hold the shopping cart:
+private CartMinDto _cartDetails;
+
+98. In Pages/Cart.razor in BlazorCommerce, add an OnInitalizedAsync method to retrieve the cookie (or create on and set it if it doesn't exist) and make a call to the Api to retrieve the cart and catrt items:
+protected override async Task OnInitializedAsync() {
+	var cartId = await JSRuntime.InvokeAsync<string>("getCartCookie");
+	if (string.IsNullOrEmpty(cartId))
+	{
+		cartId = System.Guid.NewGuid().ToString();
+		await JSRuntime.InvokeVoidAsync("setCartCookie", cartId);
+	}
+
+	_cartDetails = await Http.GetFromJsonAsync<CartMinDto>($"cartmin/{cartId}");
+}
+with "42. cart.razor retrieve the cart and cart items.txt"
+
+99. In Pages/Cart.razor in BlazorCommerce, immediately after the line that reads <tbody> add the following lines of code:
+@if (_cartDetails != null && _cartDetails.CartItems.Count() > 0)
+{
+	@foreach (var cartItem in _cartDetails.CartItems)
+	{
+with "43. cart.razor cart item for each loop.txt"
+
+100. In Pages/Cart.razor in BlazorCommerce, immediately after the first </tr> within the <tbody> block add the following line of code:
+    }
+}
+
+101. In Pages/Cart.razor in BlazorCommerce, delete the remaining <tr> code blocks.
+
+102. In Pages/Cart.razor in BlazorCommerce, replace the line that reads:
+<p class="product-name"><a href="#">Women Dress</a></p>
+with:
+<p class="product-name"><a href="/product/@cartItem.FriendlyUrl">@cartItem.ProductName</a></p>
+
+103. In Pages/Cart.razor in BlazorCommerce, replace the line that reads:
+<p class="product-des">Maboriosam in a tonto nesciung eget  distingy magndapibus.</p>
+with:
+<p class="product-des">@(cartItem.ProductOptionDescription == "N/A N/A" ? "" : cartItem.ProductOptionDescription)</p>
+
+104. In Pages/Cart.razor in BlazorCommerce, replace the line that reads:
+<td class="image" data-title="No"><img src="https://via.placeholder.com/100x100" alt="#"></td>
+with:
+<td class="image" data-title="No"><img src="@cartItem.CartImageUrl" alt="@cartItem.ProductName"></td>
+
+105. In Pages/Cart.razor in BlazorCommerce, replace the line that reads:
+<td class="price" data-title="Price"><span>$110.00 </span></td>
+with:
+<td class="price" data-title="Price"><span>£@string.Format("{0:0.00}", cartItem.Price)</span></td>
+
+106. In Pages/Cart.razor in BlazorCommerce, replace the line that reads:
+<td class="total-amount" data-title="Total"><span>$220.88</span></td>
+with:
+<td class="total-amount" data-title="Total"><span>£@string.Format("{0:0.00}", cartItem.Price * cartItem.Quantity)</span></td>
+
+107. In Pages/Cart.razor in BlazorCommerce, under the line that reads:
+@page "/cart"
+add:
+@inject AppState AppState
+
+108. At the bottom of Pages/Cart.razor add the code:
+public override async Task SetParametersAsync(ParameterView parameters)
+{
+	AppState.SetDisplayCategoryMenuInHeaderNav(false);
+	await base.SetParametersAsync(parameters);
+}
+with "44. Cart.razor SetParametersAsync snippet.txt"
+
+107. In Pages/Cart.razor in BlazorCommerce, replace the line that reads:
+<li>Cart Subtotal<span>$330.00</span></li>
+with:
+<li>Cart Subtotal<span>£@string.Format("{0:0.00}", _cartDetails.TotalPrice)</span></li>
+
+108. In Pages/Cart.razor in BlazorCommerce, replace the lines that read:
+<li>Shipping<span>Free</span></li>
+<li>You Save<span>$20.00</span></li>
+with:
+<li>VAT<span>£@string.Format("{0:0.00}", _cartDetails.TotalSalesTax)</span></li>
+
+109. In Pages/Cart.razor in BlazorCommerce, replace the line that reads:
+<li class="last">You Pay<span>$310.00</span></li>
+with:
+<li class="last">Total<span>£@string.Format("{0:0.00}", _cartDetails.TotalPrice + _cartDetails.TotalSalesTax)</span></li>
+
+110. In Pages/Cart.razor in BlazorCommerce, delete the lines that read:
+<div class="checkbox">
+	<label class="checkbox-inline" for="2"><input name="news" id="2" type="checkbox"> Shipping (+10$)</label>
+</div>
+
+111. In Pages/Cart.razor in BlazorCommerce, above the lines that read:
+<ul>
+	<li>Cart Subtotal<span>£@string.Format("{0:0.00}", _cartDetails.TotalPrice)</span></li>
+add:
+@if (_cartDetails != null)
+{
+
+112. In Pages/Cart.razor in BlazorCommerce, below the lines that read:
+	<li class="last">Total<span>£@string.Format("{0:0.00}", _cartDetails.TotalPrice + _cartDetails.TotalSalesTax)</span></li>
+</ul>
+add:
+}
+
+Now to add functionality to the cart, starting with the delete item
+
+113. Add the RemoveItemFromCart method:
+public async Task RemoveItemFromCart(int productOptionProductInstanceId)
+{
+	var cartId = await JSRuntime.InvokeAsync<string>("getCartCookie");
+	var cartItem = new RemoveItemFromCartDto {
+		CartGuid = cartId,
+		ProductOptionProductInstanceId = productOptionProductInstanceId
+	};
+	await Http.PostAsJsonAsync("cart/removeitemfromcart", cartItem);
+	_cartDetails = await Http.GetFromJsonAsync<CartMinDto>($"cartmin/{cartId}");
+	await JSRuntime.InvokeVoidAsync("notifyUpdateToCart");
+}
+with "45. Cart.razor Add RemoveItemFromCart method.txt"
+
+114. In Pages/Cart.razor in BlazorCommerce, replace the line that reads:
+<a href="#"><i class="ti-trash remove-icon"></i></a>
+with:
+<button class="btn remove" title="Remove this item" @onclick="() => RemoveItemFromCart(cartItem.ProductOptionProductInstanceId)">
+	<i class="ti-trash ti-trash"></i>
+</button>
+
+115. In wwwroot/css/style.css in BlazorCommerce, below the lines that read:
+.shopping-cart .table .remove-icon{
+	font-size:16px;
+}
+add:
+.shopping-cart .table .action button.btn.remove {
+    height: 40px;
+    width: 40px;
+    margin: 0;
+    padding: 0;
+    margin-top: 20px;
+    font-size: 16px;
+    bottom: 8px;
+}
+with "46. style.css Add remove item from cart button style.txt"
+
+Now to get the increment and decrement buttons working
+
+116. In Pages/Cart.razor in BlazorCommerce, replace the line that reads:
+<input type="text" name="quant[1]" class="input-number"  data-min="1" data-max="100" value="1">
+with:
+<input type="text" name="quant[1]" readonly class="input-number" value="@cartItem.Quantity">
+
+117. In Pages/Cart.razor in BlazorCommerce, immediately under the lines that read:
+@foreach (var cartItem in _cartDetails.CartItems)
+{
+add:
+var minusButtonDisabled = cartItem.Quantity <= 1;
+var plusButtonDisabled = cartItem.Quantity >= cartItem.Stock;
+
+118. In Pages/Cart.razor in BlazorCommerce, replace the line that reads:
+<button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+with:
+<button type="button" class="btn btn-primary btn-number" disabled="@minusButtonDisabled">
+
+119. In Pages/Cart.razor in BlazorCommerce, replace the disabled="disabled" of the line that reads:
+<button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="plus" data-field="quant[1]">
+with:
+<button type="button" class="btn btn-primary btn-number" disabled="@plusButtonDisabled">
+
+120. In Pages/Cart.razor in BlazorCommerce, add the following method:
+public async Task IncrementQuantity(int productOptionProductInstanceId)
+{
+	var cartItem = _cartDetails.CartItems.FirstOrDefault(ci => ci.ProductOptionProductInstanceId == productOptionProductInstanceId);
+	if (cartItem != null)
+	{
+		if (cartItem.Stock < (cartItem.Quantity + 1))
+		{
+			return;
+		}
+	}
+	var cartId = await JSRuntime.InvokeAsync<string>("getCartCookie");
+	var updatedCartItem = new AddItemToCartDto{
+		CartGuid = cartId,
+		ProductOptionProductInstanceId = productOptionProductInstanceId,
+		Quantity = 1
+	};
+	await Http.PostAsJsonAsync("cart/additemtocart", updatedCartItem);
+	_cartDetails = await Http.GetFromJsonAsync<CartMinDto>($"cartmin/{cartId}");
+	await JSRuntime.InvokeVoidAsync("notifyUpdateToCart");
+}
+with "47. cart.razor Add IncrementQuantity method.txt"
+
+120. In Pages/Cart.razor in BlazorCommerce, add the following method:
+public async Task DecrementQuantity(int productOptionProductInstanceId)
+{
+	var cartItem = _cartDetails.CartItems.FirstOrDefault(ci => ci.ProductOptionProductInstanceId == productOptionProductInstanceId);
+	if (cartItem != null)
+	{
+		if (cartItem.Quantity - 1 < 1)
+		{
+			return;
+		}
+	}
+	var cartId = await JSRuntime.InvokeAsync<string>("getCartCookie");
+	var updatedCartItem = new AddItemToCartDto{
+		CartGuid = cartId,
+		ProductOptionProductInstanceId = productOptionProductInstanceId,
+		Quantity = -1
+	};
+	await Http.PostAsJsonAsync("cart/additemtocart", updatedCartItem);
+	_cartDetails = await Http.GetFromJsonAsync<CartMinDto>($"cartmin/{cartId}");
+	await JSRuntime.InvokeVoidAsync("notifyUpdateToCart");
+}
+with "48. cart.razor Add DecrementQuantity method.txt"
+
+121. In Pages/Cart.razor in BlazorCommerce, replace the line that reads:
+<button type="button" class="btn btn-primary btn-number" disabled="@minusButtonDisabled">
+with:
+<button type="button" class="btn btn-primary btn-number" disabled="@minusButtonDisabled" @onclick="() => DecrementQuantity(cartItem.ProductOptionProductInstanceId)">
+
+122. In Pages/Cart.razor in BlazorCommerce, replace the line that reads:
+<button type="button" class="btn btn-primary btn-number" disabled="@plusButtonDisabled">
+with:
+<button type="button" class="btn btn-primary btn-number" disabled="@plusButtonDisabled" @onclick="() => IncrementQuantity(cartItem.ProductOptionProductInstanceId)">
+
+In the Terminal window cd in to BlazorCommerce and type dotnet run
+In another Terminal window cd in to BlazorCommerce.Api and type dotnet run
+In a browser go to https://localhost:5001 and the index page should appear, add a few products to the cart and then navigate to the cart page and increment, decrement and delete products from the cart.
+
+
+
+https://www.freelogodesign.org
+https://webassembly.org/
+https://docs.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-5.0
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly
+https://blazor-university.com/components/render-trees/
+https://stackoverflow.com/questions/62954461/the-assembly-does-not-contain-a-public-invokable-method-with-jsinvokableattribu
+https://docs.microsoft.com/en-us/aspnet/core/blazor/components/lifecycle?view=aspnetcore-5.0
+https://www.syncfusion.com/faq/how-do-you-create-a-cookie-in-the-client-side-of-blazor
+https://auth0.com/blog/securing-blazor-webassembly-apps/
+https://lisuto.com/4-tips-for-the-winning-ecommerce-site-category-structure/
+https://www.c-sharpcorner.com/article/repository-pattern-with-ado-net-in-mvc/
+https://zetcode.com/csharp/sqlite/
+https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-sln
+https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-new
+https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=netcore-cli
+https://stackoverflow.com/questions/15292880/create-sqlite-database-and-table
+https://www.c-sharpcorner.com/UploadFile/ranjancse/net-co-introduction-to-microsoft-data-sqlite/
+https://www.developersoapbox.com/connecting-to-a-sqlite-database-using-net-core/
+https://code-maze.com/blazor-webassembly-httpclient/

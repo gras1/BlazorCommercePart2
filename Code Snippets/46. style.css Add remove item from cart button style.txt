@@ -1,0 +1,15 @@
+.shopping-cart .table .action button.btn.remove {
+    height: 40px;
+    width: 40px;
+    margin: 0;
+    padding: 0;
+    margin-top: 20px;
+    font-size: 16px;
+    bottom: 8px;
+	background: #ffffff;
+}
+
+.shopping-cart .table .action button.btn.remove .ti-trash {
+	background: #fff;
+    color: #000;
+}

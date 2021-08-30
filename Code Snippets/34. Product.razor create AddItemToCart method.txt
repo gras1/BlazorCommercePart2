@@ -1,0 +1,9 @@
+private async Task AddItemToCart()
+{
+    var cartItem = new AddItemToCartDto{
+        CartGuid = await JSRuntime.InvokeAsync<string>("getCartCookie"),
+        ProductOptionProductInstanceId = ProductOptionProductInstanceId,
+        Quantity = ProductQuantity
+    };
+    await Http.PostAsJsonAsync("cart/additemtocart", cartItem);
+}

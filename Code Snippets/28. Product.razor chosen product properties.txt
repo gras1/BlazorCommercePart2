@@ -1,0 +1,11 @@
+[Parameter]
+public int ProductOptionProductInstanceId { get; set; }
+
+[Parameter]
+public string ProductPrice { get; set; }
+
+[Parameter]
+public int ProductStock {get;set;}
+
+[Parameter]
+public int ProductQuantity {get;set;}

@@ -1,0 +1,34 @@
+<!-- Product Slider -->
+<div class="product-gallery">
+    <!-- Images slider -->
+    <div class="flexslider-thumbnails">
+        <ul class="slides">
+            @if (_product != null)
+            {
+                <li data-thumb="@_product.MainImageThumbnailUrl" rel="adjustX:10, adjustY:">
+                    <img src="@_product.MainImageUrl" alt="#">
+                </li>
+                @if (!string.IsNullOrEmpty(_product.SecondImageUrl))
+                {
+                <li data-thumb="@_product.SecondImageThumbnailUrl">
+                    <img src="@_product.SecondImageUrl" alt="#">
+                </li>
+                }
+                @if (!string.IsNullOrEmpty(_product.ThirdImageUrl))
+                {
+                <li data-thumb="@_product.ThirdImageThumbnailUrl">
+                    <img src="@_product.ThirdImageUrl" alt="#">
+                </li>
+                }
+                @if (!string.IsNullOrEmpty(_product.FourthImageUrl))
+                {
+                <li data-thumb="@_product.FourthImageThumbnailUrl">
+                    <img src="@_product.FourthImageUrl" alt="#">
+                </li>
+                }
+            }
+        </ul>
+    </div>
+    <!-- End Images slider -->
+</div>
+<!-- End Product slider -->

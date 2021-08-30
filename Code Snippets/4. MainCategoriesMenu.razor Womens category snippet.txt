@@ -1,0 +1,10 @@
+<a href="/metacategory/@_bestSellingCategories.Womens.FriendlyName" class="title-link">Shop @_bestSellingCategories.Womens.Name</a>
+<div class="image">
+    <img src="@_bestSellingCategories.Womens.ImageUrl" alt="#">
+</div>
+<div class="inner-link">
+    @foreach (var bestSellingCategory in _bestSellingCategories.Womens.BestSellingLeafCategories)
+    {
+    <a href="/category/@bestSellingCategory.FriendlyUrl">@bestSellingCategory.Name</a>
+    }
+</div>

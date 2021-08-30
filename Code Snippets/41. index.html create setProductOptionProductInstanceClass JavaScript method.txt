@@ -1,0 +1,4 @@
+function setProductOptionProductInstanceClass(productOptionProductInstanceId) {
+	$('.ProductOptionProductInstanceId').removeClass("selected");
+	$('#ProductOptionProductInstance' + productOptionProductInstanceId).addClass("selected");
+}

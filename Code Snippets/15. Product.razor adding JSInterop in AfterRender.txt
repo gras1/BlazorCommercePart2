@@ -1,0 +1,8 @@
+protected override async Task OnAfterRenderAsync(bool firstRender)
+{
+    await JSRuntime.InvokeVoidAsync("setFlexSlider");
+    if (firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("setProductPageQuantityCounter");
+    }
+}

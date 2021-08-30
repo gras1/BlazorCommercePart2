@@ -1,0 +1,6 @@
+private BlazorCommerce.Shared.ProductDto _product;
+
+protected override async Task OnParametersSetAsync()
+{
+    _product = await Http.GetFromJsonAsync<BlazorCommerce.Shared.ProductDto>($"product/{friendlyProductUrl}");
+}

@@ -1,0 +1,6 @@
+@if (_product != null)
+{
+<div class="single-des">
+@((MarkupString)DoPlaceholderReplacements(_product.FullDescription))
+</div>
+}

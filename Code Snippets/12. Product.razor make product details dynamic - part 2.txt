@@ -1,0 +1,6 @@
+@if (_product != null)
+{
+<li><a href="metacategory/@_product.MetaCategoryFriendlyUrl">@_product.MetaCategory</a><i class="ti-arrow-right"></i></li>
+<li><a href="category/@_product.LeafCategoryFriendlyUrl">@_product.LeafCategory</a><i class="ti-arrow-right"></i></li>
+<li class="active"><a href="product/@friendlyProductUrl">@_product.Title</a></li>
+}

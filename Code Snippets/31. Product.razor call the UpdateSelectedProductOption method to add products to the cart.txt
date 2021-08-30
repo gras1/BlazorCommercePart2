@@ -1,0 +1,6 @@
+<ul>
+    @foreach (var productOption in _product.ProductOptions)
+    {
+    <li><button @onclick="() => UpdateSelectedProductOption(productOption.ProductOptionProductInstanceId, productOption.Price, productOption.Stock)" class='@string.Format("{0}", productOption.ProductOptionProductInstanceId == _product.ProductOptionProductInstanceId ? "selected" : string.Empty)'>@productOption.Option</button></li>
+    }
+</ul>

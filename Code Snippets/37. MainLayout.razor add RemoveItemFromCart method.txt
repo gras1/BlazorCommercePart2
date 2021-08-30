@@ -1,0 +1,9 @@
+public async Task RemoveItemFromCart(int productOptionProductInstanceId)
+{
+	var cartItem = new RemoveItemFromCartDto {
+		CartGuid = await JSRuntime.InvokeAsync<string>("getCartCookie"),
+		ProductOptionProductInstanceId = productOptionProductInstanceId
+	};
+	await Http.PostAsJsonAsync("cart/removeitemfromcart", cartItem);
+	await JSRuntime.InvokeVoidAsync("notifyUpdateToCart");
+}

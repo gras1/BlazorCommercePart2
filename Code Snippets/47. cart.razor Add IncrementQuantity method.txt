@@ -1,0 +1,20 @@
+public async Task IncrementQuantity(int productOptionProductInstanceId)
+{
+	var cartItem = _cartDetails.CartItems.FirstOrDefault(ci => ci.ProductOptionProductInstanceId == productOptionProductInstanceId);
+	if (cartItem != null)
+	{
+		if (cartItem.Stock < (cartItem.Quantity + 1))
+		{
+			return;
+		}
+	}
+	var cartId = await JSRuntime.InvokeAsync<string>("getCartCookie");
+	var updatedCartItem = new AddItemToCartDto{
+		CartGuid = cartId,
+		ProductOptionProductInstanceId = productOptionProductInstanceId,
+		Quantity = 1
+	};
+	await Http.PostAsJsonAsync("cart/additemtocart", updatedCartItem);
+	_cartDetails = await Http.GetFromJsonAsync<CartMinDto>($"cartmin/{cartId}");
+	await JSRuntime.InvokeVoidAsync("notifyUpdateToCart");
+}
